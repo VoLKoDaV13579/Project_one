@@ -16,14 +16,15 @@
         <tbody>
             <tr v-for="(recycler, key) of listOfRecycler" :key="key">
                 <th scope="row">{{ recycler.id }}</th>
-                <td>{{ recycler.status }}</td>
+                <td v-if="recycler.status" align="center"><i class="far fa-check-circle" style="color: #00f03c;"></i></td>
+                <td v-else align="center"><i class="far fa-times-circle" style="color: #e10909;"></i></td>
                 <td>{{ recycler.system_id }}</td>
                 <td>{{ recycler.address }}</td>
                 <td>{{ recycler.serial_number }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-sm btn-primary" @click="changeModalStatus('edit', recycler)"><i
-                                class="fas fa-edit"></i></button>
+                        <button type="button" class="btn btn-sm btn-primary"
+                            @click="changeModalStatus('edit', recycler)"><i class="fas fa-edit"></i></button>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-sm btn-primary"
@@ -48,28 +49,29 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label" for="title">Статус</label>
-                                <input type="text" class="form-control" id="status" v-model="newObject.status"
-                                    placeholder="Введите статус....">
-                                <div class="form-text">Введите статус</div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="status"
+                                    v-model="newObject.status" true-value="1" false-value="0">
+                                <label class="form-check-label" for="status">
+                                    Статус работы
+                                </label>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Внутренний ID</label>
+                                <label class="form-label" for="system_id">Внутренний ID</label>
                                 <input type="text" class="form-control" id="system_id" v-model="newObject.system_id"
                                     placeholder="Введите внутренний ID....">
                                 <div class="form-text">Введите внутренний ID</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="price">Адресс</label>
+                                <label class="form-label" for="address">Адресс</label>
                                 <input type="text" class="form-control" id="address" v-model="newObject.address"
                                     placeholder="Введите адресс....">
                                 <div class="form-text">Введите адресс</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="amount">Серийный номер</label>
-                                <input type="text" class="form-control" id="serial_number" v-model="newObject.serial_number"
-                                    placeholder="Введите серийный номер....">
+                                <label class="form-label" for="serial_number">Серийный номер</label>
+                                <input type="text" class="form-control" id="serial_number"
+                                    v-model="newObject.serial_number" placeholder="Введите серийный номер....">
                                 <div class="form-text">Введите серийный номер</div>
                             </div>
                         </div>
@@ -98,28 +100,18 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="title">Статус</label>
-                                <input type="text" class="form-control" id="title" v-model="updateObject.status"
-                                    placeholder="Статус....">
-                                <div class="form-text">Статус</div>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Статус работы
+                                </label>
+                                <input type="checkbox" class="form-check-input" id="status"
+                                    v-model="updateObject.status" true-value="1" false-value="0">
+                                <div class="form-text">Статус работы</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Внутренний ID</label>
-                                <input type="text" class="form-control" id="description"
-                                    v-model="updateObject.system_id" placeholder="Введите внутренний ID....">
-                                <div class="form-text">Введите внутренний ID</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="price">Адресс</label>
-                                <input type="text" class="form-control" id="price" v-model="updateObject.address"
+                                <label class="form-label" for="address">Адресс</label>
+                                <input type="text" class="form-control" id="address" v-model="updateObject.address"
                                     placeholder="Адресс....">
                                 <div class="form-text">Адресс</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="amount">Серийный номер</label>
-                                <input type="text" class="form-control" id="amount" v-model="updateObject.serial_number"
-                                    placeholder="Введите серийный номер....">
-                                <div class="form-text">Введите серийный номер</div>
                             </div>
                         </div>
                         <div class="modal-footer">

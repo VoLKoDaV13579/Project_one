@@ -22,6 +22,6 @@ Route::post('/update', [RecyclerListController::class, 'update']);
 Route::post('/delete', [RecyclerListController::class, 'delete']);
 
 Route::get('/getTheme', [RecyclerThemesController::class, 'index']);
-Route::post('/createTheme', [RecyclerListController::class, 'createTheme']);
-Route::post('/updateTheme', [RecyclerListController::class, 'updateTheme']);
-Route::post('/deleteTheme', [RecyclerListController::class, 'deleteTheme']);
+Route::post('/createTheme', [RecyclerThemesController::class, 'create']);
+Route::post('/updateTheme', [RecyclerThemesController::class, 'update']);
+Route::post('/deleteTheme', [RecyclerThemesController::class, 'delete']);

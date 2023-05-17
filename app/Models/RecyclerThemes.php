@@ -10,7 +10,7 @@ class RecyclerThemes extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title ',
+        'title',
         'description',
     ];
 }

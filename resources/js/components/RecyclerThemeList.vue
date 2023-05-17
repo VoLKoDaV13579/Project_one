@@ -82,28 +82,16 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="title">Статус</label>
-                                <input type="text" class="form-control" id="title" v-model="updateObject.status"
-                                    placeholder="Статус....">
-                                <div class="form-text">Статус</div>
+                                <label class="form-label" for="title">Тема</label>
+                                <input type="text" class="form-control" id="title" v-model="updateObject.title"
+                                    placeholder="Тема....">
+                                <div class="form-text">Тема</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Внутренний ID</label>
+                                <label class="form-label" for="description">Описание</label>
                                 <input type="text" class="form-control" id="description"
-                                    v-model="updateObject.system_id" placeholder="Введите внутренний ID....">
-                                <div class="form-text">Введите внутренний ID</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="price">Адресс</label>
-                                <input type="text" class="form-control" id="price" v-model="updateObject.address"
-                                    placeholder="Адресс....">
-                                <div class="form-text">Адресс</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="amount">Серийный номер</label>
-                                <input type="text" class="form-control" id="amount" v-model="updateObject.serial_number"
-                                    placeholder="Введите серийный номер....">
-                                <div class="form-text">Введите серийный номер</div>
+                                    v-model="updateObject.description" placeholder="Описание....">
+                                <div class="form-text">Описание</div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -159,7 +147,6 @@
                 newObject: {
                     title: '',
                     description: '',
-
                 },
                 updateObject: {}
             }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RecyclerRequest;
+use App\Http\Requests\RecyclerUpdateRequest;
 use App\Models\RecyclerList;
 use Illuminate\Http\Request;
 
@@ -12,13 +14,15 @@ class RecyclerListController extends Controller
         $listOfRecycler = RecyclerList::get();
         return response()->json($listOfRecycler);
     }
-    public function create (Request $request) 
+    public function create (RecyclerRequest $request) 
     {
+        $validated = $request->validated(); 
+
         RecyclerList::create([
-            'status' => $request['status'],
-            'system_id' => $request['system_id'],
-            'address'=> $request['address'],
-            'serial_number'=>$request['serial_number']
+            'status' => $validated['status'],
+            'system_id' => $validated['system_id'],
+            'address'=> $validated['address'],
+            'serial_number'=>$validated['serial_number']
         ]);
         $listOfRecycler = RecyclerList::get();
         return response()->json([
@@ -28,13 +32,13 @@ class RecyclerListController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(RecyclerUpdateRequest $request)
     {
+        $validated = $request->validated(); 
+
         $recycler = RecyclerList::find($request['id']);
-        $recycler->status = $request['status'];
-        $recycler->system_id = $request['system_id'];
-        $recycler->address = $request['address'];
-        $recycler->serial_number = $request['serial_number'];
+        $recycler->status = $validated ['status'];
+        $recycler->address = $validated ['address'];
         $recycler->save();
 
         $listOfRecycler = RecyclerList::get();

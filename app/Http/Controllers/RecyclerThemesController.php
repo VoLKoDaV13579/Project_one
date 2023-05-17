@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ThemeRequest;
 use App\Models\RecyclerThemes;
 use Illuminate\Http\Request;
 
@@ -14,40 +15,46 @@ class RecyclerThemesController extends Controller
     }
 
 
-    public function createTheme(Request $request)
+    public function create(ThemeRequest $request)
     {
-        RecyclerThemes::get([
-            'title' => $request['title'],
-            'description' => $request['description'],
+        $validated = $request->validated();
+
+        RecyclerThemes::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
 
         ]);
         $listOfThemes = RecyclerThemes::get();
         return response()->json([
             'status' => 200,
             'message' => 'created',
-            'themeList' => $listOfThemes, 
+            'listOfThemes' => $listOfThemes, 
         ]);
     }
 
 
 
-    public function updateTheme(Request $request)
+    public function update(ThemeRequest $request)
     {
+        $validated = $request->validated();
+
         $theme = RecyclerThemes::find($request['id']);
-        $theme->title = $request['title'];
-        $theme->description = $request['description'];
+        $theme->title = $validated['title'];
+        $theme->description = $validated['description'];
+        $theme->save();
 
         $listOfThemes = RecyclerThemes::get();
         return response()->json([
             'status' => 200,
             'message' => 'updated',
-            '$listOfThemes' => $listOfThemes,
+            'listOfThemes' => $listOfThemes,
         ]);
 
     }
 
-    public function deleteTheme(Request $request)
+    public function delete(Request $request)
     {
+        
         $theme = RecyclerThemes::find($request['id']);
         $theme->delete();
 
@@ -55,7 +62,7 @@ class RecyclerThemesController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'deleted',
-            '$listOfThemes' => $listOfThemes,
+            'listOfThemes' => $listOfThemes,
         ]);
 
     }
