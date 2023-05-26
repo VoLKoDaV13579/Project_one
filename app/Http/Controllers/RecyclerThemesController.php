@@ -10,8 +10,12 @@ class RecyclerThemesController extends Controller
 {
     public function index()
     {
-        $themeList = RecyclerThemes::get();
-        return response()->json($themeList);
+        $listOfThemes = RecyclerThemes::get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'created',
+            'listOfThemes' => $listOfThemes, 
+        ]);
     }
 
 

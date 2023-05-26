@@ -12,7 +12,12 @@ class RecyclerListController extends Controller
     public function index()
     {
         $listOfRecycler = RecyclerList::get();
-        return response()->json($listOfRecycler);
+        return response()->json([
+            'status' => 200,
+            'message' => 'created',
+            'listOfRecycler' => $listOfRecycler 
+        ]);
+        
     }
     public function create (RecyclerRequest $request) 
     {
@@ -58,6 +63,20 @@ class RecyclerListController extends Controller
         return response()->json([
             'status' => 200,
             'message' =>'deleted',
+            'listOfRecycler' => $listOfRecycler
+        ]);
+    }
+    public function submit(Request $request) {
+        
+        
+        $recycler = RecyclerList::find($request['id']);
+        $recycler->status = $request['status'];
+        $recycler->save();
+
+        $listOfRecycler = RecyclerList::get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'updated',
             'listOfRecycler' => $listOfRecycler
         ]);
     }

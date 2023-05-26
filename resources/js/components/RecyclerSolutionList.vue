@@ -6,24 +6,24 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Тема</th>
-                <th scope="col">Описание темы</th>
+                <th scope="col">ID проблемы</th>
+                <th scope="col">Решение</th>
                 <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(theme, key) of listOfThemes" :key="key">
-                <th scope="row">{{ theme.id }}</th>
-                <td>{{ theme.title }}</td>
-                <td>{{ theme.description }}</td>
+            <tr v-for="(solution, key) of listOfSolution" :key="key">
+                <th scope="row">{{ solution.id }}</th>
+                <td>{{ solution.theme }}</td>
+                <td>{{ solution.title }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-sm btn-primary" @click="changeModalStatus('edit', theme)"><i
+                        <button type="button" class="btn btn-sm btn-primary" @click="changeModalStatus('edit', solution)"><i
                                 class="fas fa-edit"></i></button>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-sm btn-primary"
-                            @click="changeModalStatus('delete', theme)"><i class="fas fa-trash-alt"></i></button>
+                            @click="changeModalStatus('delete', solution)"><i class="fas fa-trash-alt"></i></button>
                     </div>
 
                 </td>
@@ -46,13 +46,13 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label class="form-label" for="title">Тема</label>
-                                <input type="text" class="form-control" id="title" v-model="newObject.title"
+                                <input type="text" class="form-control" id="title" v-model="newObject.theme"
                                     placeholder="Тема....">
                                 <div class="form-text">Тема</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Описание</label>
-                                <input type="text" class="form-control" id="description" v-model="newObject.description"
+                                <label class="form-label" for="title">Описание</label>
+                                <input type="text" class="form-control" id="title" v-model="newObject.title"
                                     placeholder="Описание....">
                                 <div class="form-text">Описание</div>
                             </div>
@@ -83,15 +83,15 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label class="form-label" for="title">Тема</label>
-                                <input type="text" class="form-control" id="title" v-model="updateObject.title"
+                                <input type="text" class="form-control" id="theme" v-model="updateObject.theme"
                                     placeholder="Тема....">
                                 <div class="form-text">Тема</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Описание</label>
-                                <input type="text" class="form-control" id="description"
-                                    v-model="updateObject.description" placeholder="Описание....">
-                                <div class="form-text">Описание</div>
+                                <label class="form-label" for="title">Тема</label>
+                                <input type="text" class="form-control" id="title" v-model="updateObject.title"
+                                    placeholder="Тема....">
+                                <div class="form-text">Тема</div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -140,13 +140,13 @@
     export default {
         data() {
             return {
-                listOfThemes: [],
+                listOfSolution: [],
                 isCreateModal: false,
                 isEditModal: false,
                 isDeleteModal: false,
                 newObject: {
+                    theme: '',
                     title: '',
-                    description: '',
                 },
                 updateObject: {},
                 deleteObjectId: {
@@ -156,9 +156,9 @@
         },
         mounted() {
             let vue = this;
-            axios.get('/api/getTheme')
+            axios.get('/api/getSolution')
                 .then(function (response) {
-                    vue.listOfThemes = response.data.listOfThemes;
+                    vue.listOfSolution = response.data.listOfSolution;
                 });
         },
 
@@ -180,21 +180,21 @@
             save: function (modal) {
                 let vue = this;
                 if (modal == 'create') {
-                    axios.post('/api/createTheme', vue.newObject)
+                    axios.post('/api/createSolution', vue.newObject)
                         .then(function (response) {
-                            vue.listOfThemes = response.data.listOfThemes;
+                            vue.listOfSolution = response.data.listOfSolution;
                             vue.changeModalStatus('create');
                         });
                 } else if (modal == 'edit') {
-                    axios.post('/api/updateTheme', vue.updateObject)
+                    axios.post('/api/updateSolution', vue.updateObject)
                         .then(function (response) {
-                            vue.listOfThemes = response.data.listOfThemes;
+                            vue.listOfSolution = response.data.listOfSolution;
                             vue.changeModalStatus('edit');
                         });
                 } else if (modal == 'delete') {
-                    axios.post('/api/deleteTheme', vue.deleteObjectId)
+                    axios.post('/api/deleteSolution', vue.deleteObjectId)
                         .then(function (response) {
-                            vue.listOfThemes = response.data.listOfThemes;
+                            vue.listOfSolution = response.data.listOfSolution;
                             vue.changeModalStatus('deleteReturn');
                         });
 

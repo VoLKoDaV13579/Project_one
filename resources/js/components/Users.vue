@@ -6,24 +6,26 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Тема</th>
-                <th scope="col">Описание темы</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Почта</th>
+                <th scope="col">Пароль</th>
                 <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(theme, key) of listOfThemes" :key="key">
-                <th scope="row">{{ theme.id }}</th>
-                <td>{{ theme.title }}</td>
-                <td>{{ theme.description }}</td>
+            <tr v-for="(user, key) of users" :key="key">
+                <th scope="row">{{ user.id }}</th>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.password }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-sm btn-primary" @click="changeModalStatus('edit', theme)"><i
+                        <button type="button" class="btn btn-sm btn-primary" @click="changeModalStatus('edit', user)"><i
                                 class="fas fa-edit"></i></button>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-sm btn-primary"
-                            @click="changeModalStatus('delete', theme)"><i class="fas fa-trash-alt"></i></button>
+                            @click="changeModalStatus('delete', user)"><i class="fas fa-trash-alt"></i></button>
                     </div>
 
                 </td>
@@ -45,16 +47,23 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="title">Тема</label>
-                                <input type="text" class="form-control" id="title" v-model="newObject.title"
-                                    placeholder="Тема....">
-                                <div class="form-text">Тема</div>
+                                <label class="form-label" for="name">Имя</label>
+                                <input type="text" class="form-control" id="name" v-model="newObject.name"
+                                    placeholder="Имя....">
+                                <div class="form-text">Имя</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Описание</label>
-                                <input type="text" class="form-control" id="description" v-model="newObject.description"
-                                    placeholder="Описание....">
-                                <div class="form-text">Описание</div>
+                                <label class="form-label" for="email">Почта</label>
+                                <input type="text" class="form-control" id="email" v-model="newObject.email"
+                                    placeholder="Почта....">
+                                <div class="form-text">Формат электронной почты "example@example.com"</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="password">Пароль</label>
+                                <input type="password" class="form-control" id="password" v-model="newObject.password"
+                                    placeholder="Пароль....">
+                                <div class="form-text">Пароль должен содержать хотя бы одну цифру, одну строчную букву,
+                                    один символ из списка "!@#$%^&*", и быть не короче 8 и не длиннее 25 символов</div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -82,16 +91,23 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="title">Тема</label>
-                                <input type="text" class="form-control" id="title" v-model="updateObject.title"
-                                    placeholder="Тема....">
-                                <div class="form-text">Тема</div>
+                                <label class="form-label" for="name">Имя</label>
+                                <input type="text" class="form-control" id="name" v-model="updateObject.name"
+                                    placeholder="Имя....">
+                                <div class="form-text">Имя</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="description">Описание</label>
-                                <input type="text" class="form-control" id="description"
-                                    v-model="updateObject.description" placeholder="Описание....">
-                                <div class="form-text">Описание</div>
+                                <label class="form-label" for="email">Почта</label>
+                                <input type="text" class="form-control" id="email" v-model="updateObject.email"
+                                    placeholder="Почта....">
+                                <div class="form-text">Формат электронной почты "example@example.com"</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="password">Пароль</label>
+                                <input type="password" class="form-control" id="password"
+                                    v-model="updateObject.password" placeholder="Пароль....">
+                                <div class="form-text">Пароль должен содержать хотя бы одну цифру, одну строчную букву,
+                                    один символ из списка "!@#$%^&*", и быть не короче 8 и не длиннее 25 символов</div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -137,16 +153,18 @@
 </template>
 
 <script>
+import nav from './Navigation.vue'
     export default {
         data() {
             return {
-                listOfThemes: [],
+                users: [],
                 isCreateModal: false,
                 isEditModal: false,
                 isDeleteModal: false,
                 newObject: {
-                    title: '',
-                    description: '',
+                    name: '',
+                    email: '',
+                    password: '',
                 },
                 updateObject: {},
                 deleteObjectId: {
@@ -156,9 +174,9 @@
         },
         mounted() {
             let vue = this;
-            axios.get('/api/getTheme')
+            axios.get('/api/getUser')
                 .then(function (response) {
-                    vue.listOfThemes = response.data.listOfThemes;
+                    vue.users = response.data.users;
                 });
         },
 
@@ -180,21 +198,21 @@
             save: function (modal) {
                 let vue = this;
                 if (modal == 'create') {
-                    axios.post('/api/createTheme', vue.newObject)
+                    axios.post('/api/createUser', vue.newObject)
                         .then(function (response) {
-                            vue.listOfThemes = response.data.listOfThemes;
+                            vue.users = response.data.users;
                             vue.changeModalStatus('create');
                         });
                 } else if (modal == 'edit') {
-                    axios.post('/api/updateTheme', vue.updateObject)
+                    axios.post('/api/updateUser', vue.updateObject)
                         .then(function (response) {
-                            vue.listOfThemes = response.data.listOfThemes;
+                            vue.users = response.data.users;
                             vue.changeModalStatus('edit');
                         });
                 } else if (modal == 'delete') {
-                    axios.post('/api/deleteTheme', vue.deleteObjectId)
+                    axios.post('/api/deleteUser', vue.deleteObjectId)
                         .then(function (response) {
-                            vue.listOfThemes = response.data.listOfThemes;
+                            vue.users = response.data.users;
                             vue.changeModalStatus('deleteReturn');
                         });
 

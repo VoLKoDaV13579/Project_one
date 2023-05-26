@@ -10,17 +10,21 @@
                 <th scope="col">Внутренний ID</th>
                 <th scope="col">Адресс</th>
                 <th scope="col">Серийный номер</th>
+                <th scope="col">Смена состояния</th>
                 <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(recycler, key) of listOfRecycler" :key="key">
                 <th scope="row">{{ recycler.id }}</th>
-                <td v-if="recycler.status" align="center"><i class="far fa-check-circle" style="color: #00f03c;"></i></td>
+                <td v-if="recycler.status" align="center"><i class="far fa-check-circle" style="color: #00f03c;"></i>
+                </td>
                 <td v-else align="center"><i class="far fa-times-circle" style="color: #e10909;"></i></td>
                 <td>{{ recycler.system_id }}</td>
                 <td>{{ recycler.address }}</td>
                 <td>{{ recycler.serial_number }}</td>
+                <td> <input type="checkbox" true-value="1" false-value="0" v-model="recycler.status"
+                        v-bind:id="recycler.id" @change="submit(recycler)"></td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-sm btn-primary"
@@ -59,8 +63,8 @@
                             <div class="mb-3">
                                 <label class="form-label" for="system_id">Внутренний ID</label>
                                 <input type="text" class="form-control" id="system_id" v-model="newObject.system_id"
-                                    placeholder="Введите внутренний ID....">
-                                <div class="form-text">Введите внутренний ID</div>
+                                    placeholder="RCL29348">
+                                <div class="form-text">Формат ID - RCL29348</div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="address">Адресс</label>
@@ -71,8 +75,8 @@
                             <div class="mb-3">
                                 <label class="form-label" for="serial_number">Серийный номер</label>
                                 <input type="text" class="form-control" id="serial_number"
-                                    v-model="newObject.serial_number" placeholder="Введите серийный номер....">
-                                <div class="form-text">Введите серийный номер</div>
+                                    v-model="newObject.serial_number" placeholder="S123456789">
+                                <div class="form-text">Формат серийного номера - S123456789</div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -99,14 +103,6 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Статус работы
-                                </label>
-                                <input type="checkbox" class="form-check-input" id="status"
-                                    v-model="updateObject.status" true-value="1" false-value="0">
-                                <div class="form-text">Статус работы</div>
-                            </div>
                             <div class="mb-3">
                                 <label class="form-label" for="address">Адресс</label>
                                 <input type="text" class="form-control" id="address" v-model="updateObject.address"
@@ -157,6 +153,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         data() {
             return {
@@ -165,20 +163,22 @@
                 isEditModal: false,
                 isDeleteModal: false,
                 newObject: {
-                    status: '',
+                    status: 0,
                     system_id: '',
-                    address: 0,
-                    serial_number: 0,
+                    address: '',
+                    serial_number: '',
                 },
-                updateObject: {}
+                updateObject: {},
+                deleteObjectId: {
+                    id: 0,
+                },
             }
         },
         mounted() {
             let vue = this;
             axios.get('/api/get')
                 .then(function (response) {
-                    vue.listOfRecycler = response.data;
-                    console.log(vue.listOfRecycler);
+                    vue.listOfRecycler = response.data.listOfRecycler;
                 });
         },
 
@@ -190,8 +190,9 @@
                     this.updateObject = object;
                     this.isEditModal = !this.isEditModal;
                 } else if (modal == 'delete') {
-                    this.updateObject = object;
-                    console.log(this.updateObject);
+                    this.deleteObjectId.id = object.id;
+                    this.isDeleteModal = !this.isDeleteModal;
+                } else if (modal == 'deleteReturn') {
                     this.isDeleteModal = !this.isDeleteModal;
                 }
             },
@@ -203,24 +204,31 @@
                         .then(function (response) {
                             vue.listOfRecycler = response.data.listOfRecycler;
                             vue.changeModalStatus('create');
-                            console.log('Success');
                         });
                 } else if (modal == 'edit') {
                     axios.post('/api/update', vue.updateObject)
                         .then(function (response) {
                             vue.listOfRecycler = response.data.listOfRecycler;
                             vue.changeModalStatus('edit');
-                            console.log('Success');
                         });
                 } else if (modal == 'delete') {
-                    console.log(vue.updateObject);
-                    axios.post('/api/delete', vue.updateObject)
+                    axios.post('/api/delete', vue.deleteObjectId)
                         .then(function (response) {
                             vue.listOfRecycler = response.data.listOfRecycler;
-                            vue.changeModalStatus('delete');
+                            vue.changeModalStatus('deleteReturn');
                         });
 
                 }
+            },
+
+            submit: function(object = null) {
+                let vue = this;
+                vue.updateObject = object;
+                axios.post('api/submit', vue.updateObject)
+                    .then(function (response) {
+                        vue.listOfRecycler = response.data.listOfRecycler;
+                    })
+
             }
         }
     }
