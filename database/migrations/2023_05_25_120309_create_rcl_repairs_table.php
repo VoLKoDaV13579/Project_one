@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('rcl_repairs', function (Blueprint $table) {
             $table->id();
-            $table->recycler_id();
-            $table->theme_id();
-            $table->solution_id();
+            $table->unsignedBigInteger('recycler_id');
+            $table->foreign('recycler_id')->references('id')->on('recycler_lists');
+            $table->unsignedBigInteger('theme_id');
+            $table->foreign('theme_id')->references('id')->on('recycler_themes');
+            $table->unsignedBigInteger('solution_id');
+            $table->foreign('solution_id')->references('id')->on('recycler_solutions');
             $table->timestamps();
         });
     }
