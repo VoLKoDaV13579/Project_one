@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('recycler_solutions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('theme_id', 50);
+            $table->unsignedBigInteger('theme_id');
             $table->foreign('theme_id')->references('id')->on('recycler_themes');
             $table->string('title', 50);
             $table->timestamps();

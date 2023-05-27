@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('recycler_id');
             $table->foreign('recycler_id')->references('id')->on('recycler_lists');
+            // $table->foreign('recycler_id')->references('id')->on('recycler_lists');
             $table->unsignedBigInteger('theme_id');
             $table->foreign('theme_id')->references('id')->on('recycler_themes');
+            // $table->foreign('theme_id')->references('id')->on('recycler_themes');
             $table->unsignedBigInteger('solution_id');
             $table->foreign('solution_id')->references('id')->on('recycler_solutions');
+            // $table->foreign(['solution_id', 'recycler_id', 'theme_id'])->references(['id', 'id', 'id'])->on(['recycler_solutions', 'recycler_lists', 'recycler_themes']);
             $table->timestamps();
         });
     }
